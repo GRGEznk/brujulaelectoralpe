@@ -1,0 +1,22 @@
+export const usuarios = [
+  { id: 1, email: "admin@decide.pe", rol: "admin", fecha_creacion: "10-01-2024", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 2, email: "supervisor@decide.pe", rol: "admin", fecha_creacion: "15-01-2024", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 3, email: "analista@decide.pe", rol: "admin", fecha_creacion: "01-02-2024", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 4, email: "moderador@decide.pe", rol: "admin", fecha_creacion: "10-02-2024", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 5, email: "juan.perez@email.com", rol: "user", fecha_creacion: "20-01-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 6, email: "maria.gonzalez@email.com", rol: "user", fecha_creacion: "25-01-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 7, email: "carlos.rodriguez@email.com", rol: "user", fecha_creacion: "05-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 8, email: "ana.lopez@email.com", rol: "user", fecha_creacion: "08-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 9, email: "luis.martinez@email.com", rol: "user", fecha_creacion: "12-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 10, email: "sofia.garcia@email.com", rol: "user", fecha_creacion: "14-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 11, email: "pedro.sanchez@email.com", rol: "user", fecha_creacion: "18-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 12, email: "laura.fernandez@email.com", rol: "user", fecha_creacion: "22-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 13, email: "javier.diaz@email.com", rol: "user", fecha_creacion: "25-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 14, email: "elena.romero@email.com", rol: "user", fecha_creacion: "28-02-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 15, email: "miguel.torres@email.com", rol: "user", fecha_creacion: "02-03-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 16, email: "isabel.ortiz@email.com", rol: "user", fecha_creacion: "15-10-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 17, email: "daniel.vargas@email.com", rol: "user", fecha_creacion: "05-11-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 18, email: "patricia.castro@email.com", rol: "user", fecha_creacion: "20-12-2025", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 19, email: "sergio.navarro@email.com", rol: "user", fecha_creacion: "02-01-2026", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" },
+  { id: 20, email: "beatriz.molina@email.com", rol: "user", fecha_creacion: "10-01-2026", password: "$2a$10$N9qo8uLOickgx2ZMRZoMye" }
+];

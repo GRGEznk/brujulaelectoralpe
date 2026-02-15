@@ -1,0 +1,17 @@
+@import url("https://fonts.cdnfonts.com/css/argentum-sans");
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --color-negro: #151515;
+  --color-red: #be1717;
+  --color-primary: #be1717;
+  --color-blue: #3885a5;
+  --color-cards: #f2f2f2;
+  --color-fondos: #fafafa;
+  --color-blanco: #ffffff;
+  --color-muted: #6b7280;
+  --color-blue-dark: #2a627a;
+  --font-argentum: "Argentum Sans", sans-serif;
+  --font-sans: "Argentum Sans", sans-serif;
+}
