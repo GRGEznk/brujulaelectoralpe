@@ -15,23 +15,33 @@ const RegistroPartidos = ({ partidoToEdit, onSuccess, onCancel }) => {
     nombre: "",
     nombre_largo: "",
     sigla: "",
+    candidato_presidencial: "",
+    lider_partido: "",
+    color_primario: "#000000",
     plan_gobierno: "",
+    anio_fundacion: "",
+    anio_inscripcion_jne: "",
+    tipo_organizacion: "Partido Político",
   });
 
   useEffect(() => {
     if (partidoToEdit) {
+      const meta =
+        (Array.isArray(partidoToEdit.partido_metadata)
+          ? partidoToEdit.partido_metadata[0]
+          : partidoToEdit.partido_metadata) || {};
+
       setFormData({
         nombre: partidoToEdit.nombre || "",
         nombre_largo: partidoToEdit.nombre_largo || "",
         sigla: partidoToEdit.sigla || "",
-        candidato_presidencial: partidoToEdit.candidato_presidencial || "",
-        lider_partido: partidoToEdit.lider_partido || "",
-        color_primario: partidoToEdit.color_primario || "#000000",
-        plan_gobierno: partidoToEdit.plan_gobierno || "",
-        anio_fundacion: partidoToEdit.anio_fundacion || "",
-        anio_inscripcion_jne: partidoToEdit.anio_inscripcion_jne || "",
-        tipo_organizacion:
-          partidoToEdit.tipo_organizacion || "Partido Político",
+        candidato_presidencial: meta.candidato_presidencial || "",
+        lider_partido: meta.lider_partido || "",
+        color_primario: meta.color_primario || "#000000",
+        plan_gobierno: meta.plan_gobierno || "",
+        anio_fundacion: meta.anio_fundacion || "",
+        anio_inscripcion_jne: meta.anio_inscripcion_jne || "",
+        tipo_organizacion: meta.tipo_organizacion || "Partido Político",
       });
     }
   }, [partidoToEdit]);
@@ -180,8 +190,22 @@ const RegistroPartidos = ({ partidoToEdit, onSuccess, onCancel }) => {
                   type="number"
                   name="anio_fundacion"
                   className="input input-bordered w-full focus:input-error"
-                  placeholder="YYYY"
+                  placeholder="Ej: 1990"
                   value={formData.anio_fundacion}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-control">
+                <label className="label font-semibold">
+                  Año Inscripción JNE
+                </label>
+                <input
+                  type="number"
+                  name="anio_inscripcion_jne"
+                  className="input input-bordered w-full focus:input-error"
+                  placeholder="Ej: 2000"
+                  value={formData.anio_inscripcion_jne}
                   onChange={handleInputChange}
                 />
               </div>

@@ -108,7 +108,11 @@ export default function ConsultaPartidos({ onEdit }) {
                 <th className="w-16 text-center">Logo</th>
                 <th>Sigla</th>
                 <th>Nombre</th>
-                <th>Presidencial / Plan</th>
+                <th>Presidencial</th>
+                <th>Líder</th>
+                <th className="text-center">Fund.</th>
+                <th className="text-center">Inscrip.</th>
+                <th className="text-center">Plan</th>
                 <th className="text-center w-32">Acciones</th>
               </tr>
             </thead>
@@ -169,7 +173,7 @@ export default function ConsultaPartidos({ onEdit }) {
                         </div>
                       </td>
 
-                      {/* Columna Candidato / Plan */}
+                      {/* Columna Candidato */}
                       <td className="align-middle">
                         <div className="flex items-center gap-3">
                           <div className="avatar">
@@ -186,33 +190,62 @@ export default function ConsultaPartidos({ onEdit }) {
                               ) : null}
                             </div>
                           </div>
-                          <div>
-                            <div className="font-semibold text-sm text-gray-700">
-                              {meta.candidato_presidencial || (
-                                <span className="text-gray-400 italic">
-                                  No definido
-                                </span>
-                              )}
-                            </div>
-                            {meta.plan_gobierno && (
-                              <a
-                                href={meta.plan_gobierno}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[10px] text-blue hover:underline flex items-center gap-1"
-                              >
-                                <FileText size={10} /> Plan de Gobierno
-                              </a>
+                          <div className="font-semibold text-sm text-gray-700">
+                            {meta.candidato_presidencial || (
+                              <span className="text-gray-400 italic text-xs">
+                                No definido
+                              </span>
                             )}
                           </div>
                         </div>
                       </td>
 
+                      {/* Columna Líder */}
+                      <td className="align-middle">
+                        <span className="text-sm text-gray-700">
+                          {meta.lider_partido || (
+                            <span className="text-gray-400 italic text-xs">
+                              N/A
+                            </span>
+                          )}
+                        </span>
+                      </td>
+
+                      {/* Columna Año Fundación */}
+                      <td className="align-middle text-center">
+                        <span className="text-sm text-gray-700">
+                          {meta.anio_fundacion || "-"}
+                        </span>
+                      </td>
+
+                      {/* Columna Año Inscripción */}
+                      <td className="align-middle text-center">
+                        <span className="text-sm text-gray-700">
+                          {meta.anio_inscripcion_jne || "-"}
+                        </span>
+                      </td>
+
+                      {/* Columna Plan de Gobierno */}
+                      <td className="align-middle text-center">
+                        {meta.plan_gobierno ? (
+                          <a
+                            href={meta.plan_gobierno}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-ghost btn-xs text-blue hover:bg-blue-50"
+                            title="Ver Plan de Gobierno"
+                          >
+                            <FileText size={16} />
+                          </a>
+                        ) : (
+                          <span className="text-gray-300">
+                            <FileText size={16} className="opacity-30" />
+                          </span>
+                        )}
+                      </td>
+
                       <td className="align-middle">
                         <div className="flex justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                          {/* <button className="btn btn-ghost btn-xs text-blue hover:bg-blue-50" title="Ver Propuestas">
-                                                        <FileText size={16} />
-                                                    </button> */}
                           <button
                             onClick={() => onEdit(p)}
                             className="btn btn-ghost btn-sm text-blue hover:bg-blue-50"

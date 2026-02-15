@@ -116,12 +116,62 @@ const PartyHero = ({ partido, bgColor, textColor }) => (
     </aside>
 
     <div className="flex-1 pt-4 md:pt-8 text-center md:text-left">
-      <p className="text-gray-700 leading-relaxed text-lg max-w-2xl mx-auto md:mx-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+      <p className="text-gray-700 leading-relaxed text-lg max-w-2xl mx-auto md:mx-0 font-medium text-justify">
+        Con raíces que datan desde{" "}
+        <span className="font-bold text-gray-900">
+          {partido?.partido_metadata?.anio_fundacion || "---"}
+        </span>
+        ,{" "}
+        <span className="font-bold text-gray-900">{partido.nombre_largo}</span>{" "}
+        (o simplemente{" "}
+        <span className="font-bold text-gray-900">{partido.sigla}</span>) es
+        un(a){" "}
+        <span className="font-bold text-gray-900">
+          {partido?.partido_metadata?.tipo_organizacion ||
+            "organización política"}
+        </span>{" "}
+        liderado(a) por{" "}
+        <span className="font-bold text-gray-900">
+          {partido?.partido_metadata?.lider_partido || "---"}
+        </span>
+        . Tras lograr su inscripción oficial en el año{" "}
+        <span className="font-bold text-gray-900">
+          {partido?.partido_metadata?.anio_inscripcion_jne || "---"}
+        </span>
+        , la organización se prepara para el proceso electoral 2026 llevando a{" "}
+        <span className="font-bold text-gray-900">
+          {partido?.partido_metadata?.candidato_presidencial || "---"}
+        </span>{" "}
+        a encabezar su plancha presidencial, buscando representar a sus
+        electores.
       </p>
+
+      {partido?.partido_metadata?.plan_gobierno && (
+        <div className="mt-6 flex justify-center md:justify-start">
+          <a
+            href={partido.partido_metadata.plan_gobierno}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary bg-red-600 hover:bg-red-700 text-white border-none px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18 18.246 18.477 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            Ver Plan de Gobierno
+          </a>
+        </div>
+      )}
     </div>
   </div>
 );
@@ -182,7 +232,7 @@ const VistaPartido = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const bgColor = partido?.color_primario || "#be1717";
+  const bgColor = partido?.partido_metadata?.color_primario || "#be1717";
   const textColor = getContrastYIQ(bgColor);
 
   // Fetch data
