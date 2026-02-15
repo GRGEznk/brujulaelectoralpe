@@ -133,7 +133,7 @@ export default function ConsultaPartidos({ onEdit }) {
                         <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white border border-gray-100 shadow-sm p-1 flex items-center justify-center mx-auto">
                           {sigla ? (
                             <img
-                              src={`/logos/${sigla}.png`}
+                              src={`/logos/${sigla.toUpperCase()}.png`}
                               alt={sigla}
                               className="w-full h-full object-contain"
                               onError={(e) => {
@@ -180,7 +180,7 @@ export default function ConsultaPartidos({ onEdit }) {
                             <div className="w-8 h-8 rounded-full ring-1 ring-gray-100 overflow-hidden bg-gray-50 flex items-center justify-center">
                               {sigla ? (
                                 <img
-                                  src={`/candidatos/${sigla}.png`}
+                                  src={`/candidatos/${sigla.toUpperCase()}.png`}
                                   alt="Candidato"
                                   className="object-cover w-full h-full"
                                   onError={(e) => {

@@ -41,7 +41,7 @@ const ComparadorRespuestas = ({
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--color-bordes)] bg-white flex items-center justify-center p-1">
                           <img
-                            src={`/logos/${partido.sigla.toLowerCase()}.png`}
+                            src={`/logos/${partido.sigla.toUpperCase()}.png`}
                             alt={partido.nombre}
                             className="w-full h-full object-contain"
                             onError={(e) => {

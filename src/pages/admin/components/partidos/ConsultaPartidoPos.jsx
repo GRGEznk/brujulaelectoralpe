@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Filter, Search, RotateCcw } from "lucide-react";
 import api from "../../../../api/api";
-import { logos } from "./data/partyAssets";
 
 export default function ConsultaPartidoPos() {
   const [positions, setPositions] = useState([]);
@@ -145,15 +144,16 @@ export default function ConsultaPartidoPos() {
           {/* Logos Container */}
           <div className="absolute inset-16">
             {positions.map((p) => {
-              const logoSrc = logos[p.nombre?.toUpperCase()];
-              let x = Math.max(
-                -100,
-                Math.min(100, parseFloat(p.posicion_x || 0)),
-              );
-              let y = Math.max(
-                -100,
-                Math.min(100, parseFloat(p.posicion_y || 0)),
-              );
+              const partyName = p.nombre || "Partido";
+              const logoSrc = p.sigla
+                ? `/logos/${p.sigla.toUpperCase()}.png`
+                : null;
+
+              const xVal = parseFloat(p.posicion_x);
+              const yVal = parseFloat(p.posicion_y);
+
+              const x = isNaN(xVal) ? 0 : Math.max(-100, Math.min(100, xVal));
+              const y = isNaN(yVal) ? 0 : Math.max(-100, Math.min(100, yVal));
 
               return (
                 <div
@@ -285,26 +285,36 @@ export default function ConsultaPartidoPos() {
                       <td className="align-middle">
                         <div className="flex items-center gap-3 font-semibold text-negro">
                           <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded-full border border-gray-100 p-0.5">
-                            {logos[p.nombre?.toUpperCase()] ? (
+                            {p.sigla ? (
                               <img
-                                src={logos[p.nombre?.toUpperCase()]}
+                                src={`/logos/${p.sigla.toUpperCase()}.png`}
                                 alt=""
                                 className="w-full h-full object-contain"
+                                onError={(e) => {
+                                  e.target.style.display = "none";
+                                  e.target.nextSibling.style.display = "flex";
+                                }}
                               />
-                            ) : (
-                              <span className="text-[10px] font-bold text-gray-400">
-                                {p.sigla?.substring(0, 2)}
-                              </span>
-                            )}
+                            ) : null}
+                            <span
+                              className="text-[10px] font-bold text-gray-400"
+                              style={{ display: p.sigla ? "none" : "flex" }}
+                            >
+                              {p.sigla?.substring(0, 2) || "??"}
+                            </span>
                           </div>
                           <span className="whitespace-nowrap">{p.nombre}</span>
                         </div>
                       </td>
                       <td className="text-center font-mono text-blue align-middle">
-                        {parseFloat(p.posicion_x).toFixed(2)}
+                        {p.posicion_x !== null
+                          ? parseFloat(p.posicion_x).toFixed(2)
+                          : "0.00"}
                       </td>
                       <td className="text-center font-mono text-blue align-middle">
-                        {parseFloat(p.posicion_y).toFixed(2)}
+                        {p.posicion_y !== null
+                          ? parseFloat(p.posicion_y).toFixed(2)
+                          : "0.00"}
                       </td>
                       <td className="text-sm text-muted align-middle whitespace-nowrap">
                         {p.fecha_calculo

@@ -83,7 +83,7 @@ export default function Comparador() {
             <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-md bg-white flex items-center justify-center">
               {partido1 ? (
                 <img
-                  src={`/candidatos/${partido1.sigla.toLowerCase()}.png`}
+                  src={`/candidatos/${partido1.sigla.toUpperCase()}.png`}
                   alt={partido1.candidato_presidencial}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -132,7 +132,7 @@ export default function Comparador() {
             <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-md bg-white flex items-center justify-center">
               {partido2 ? (
                 <img
-                  src={`/candidatos/${partido2.sigla.toLowerCase()}.png`}
+                  src={`/candidatos/${partido2.sigla.toUpperCase()}.png`}
                   alt={partido2.candidato_presidencial}
                   className="w-full h-full object-cover"
                   onError={(e) => {

@@ -124,8 +124,8 @@ export default function Resultado() {
   const otherMatches = results.slice(1);
 
   // obtener assets ganador (usamos la carpeta public con la convención de siglas)
-  const topLogo = `/logos/${topMatch.sigla}.png`;
-  const topCandidato = `/candidatos/${topMatch.sigla}.png`;
+  const topLogo = `/logos/${topMatch.sigla.toUpperCase()}.png`;
+  const topCandidato = `/candidatos/${topMatch.sigla.toUpperCase()}.png`;
 
   const isGuest = session && session.usuario_id === null && !user;
 
@@ -269,7 +269,7 @@ export default function Resultado() {
 
           <div className="space-y-4 px-4 md:px-0">
             {otherMatches.map((item, index) => {
-              const partyLogo = `/logos/${item.sigla}.png`;
+              const partyLogo = `/logos/${item.sigla.toUpperCase()}.png`;
               return (
                 <div
                   key={item.id}
