@@ -10,15 +10,17 @@ export default function Resultado() {
   const navigate = useNavigate();
   const sessionId = slug || searchParams.get("session_id");
 
-  const [results, setResults] = useState([]);
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [linking, setLinking] = useState(false);
+  // PASO 1: INICIO (Definición de estados de Resultados)
+  const [results, setResults] = useState([]); // Lista de partidos y su % de afinidad
+  const [session, setSession] = useState(null); // Datos de la sesión actual
+  const [loading, setLoading] = useState(true); // Control de pantalla de carga
+  const [error, setError] = useState(null); // Captura de errores de la API
+  const [showAuthModal, setShowAuthModal] = useState(false); // Control del modal de registro
+  const [linking, setLinking] = useState(false); // Estado para evitar doble vinculación
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
+  // PASO 2: CARGA Y VINCULACIÓN (Lógica principal de recuperación de datos)
   useEffect(() => {
     const fetchData = async () => {
       if (!sessionId) {
@@ -28,16 +30,16 @@ export default function Resultado() {
       }
 
       try {
-        // 1. Obtener afinidades
+        // 2.1. Afinidades: Obtenemos el ranking de partidos basado en las respuestas
         const matchesRes = await api.get(`/quiz/session/${sessionId}/matches`);
         setResults(matchesRes.data);
 
-        // 2. Obtener datos de la sesión para ver si es invitado
+        // 2.2. Datos de sesión: Verificamos si es un usuario invitado o registrado
         const sessionRes = await api.get(`/quiz/session/${sessionId}`);
         const sessionData = sessionRes.data;
         setSession(sessionData);
 
-        // 3. Si el usuario está logueado y la sesión es anónima, vincular automáticamente
+        // 2.3. Lógica de "Reclamo": Si el usuario acaba de loguearse, vinculamos su quiz anónimo
         if (user && sessionData.usuario_id === null && !linking) {
           setLinking(true);
           try {
@@ -45,7 +47,7 @@ export default function Resultado() {
               session_id: sessionId,
               usuario_id: user.id,
             });
-            // Actualizar estado local de la sesión
+            // Sincronizamos el estado local para mostrar que ya está guardado
             setSession((prev) => ({ ...prev, usuario_id: user.id }));
           } catch (linkErr) {
             console.error("Error vinculando sesión:", linkErr);
@@ -120,15 +122,19 @@ export default function Resultado() {
     );
   }
 
-  const topMatch = results[0];
-  const otherMatches = results.slice(1);
+  // PASO 3: CÁLCULOS DE PRESENTACIÓN (Preparando la data para el UI)
+  const topMatch = results[0]; // El partido con mayor afinidad
+  const otherMatches = results.slice(1); // El resto del ranking
 
-  // obtener assets ganador (usamos la carpeta public con la convención de siglas)
-  const topLogo = `/logos/${topMatch.sigla.toUpperCase()}.png`;
-  const topCandidato = `/candidatos/${topMatch.sigla.toUpperCase()}.png`;
+  // 3.1. Resolución de Assets: Construimos las rutas de imágenes dinámicamente
+  // usamos la carpeta public con la convención de siglas
+  const topLogo = `/logos/${topMatch?.sigla.toUpperCase()}.png`;
+  const topCandidato = `/candidatos/${topMatch?.sigla.toUpperCase()}.png`;
 
+  // 3.2. Estado de Sesión: ¿Es un invitado puro? (Para mostrar el botón de guardado)
   const isGuest = session && session.usuario_id === null && !user;
 
+  // PASO 5: RENDERIZADO DINÁMICO (JSX Reactivo)
   return (
     <div className="min-h-screen bg-white font-sans pb-20">
       <main className="max-w-4xl mx-auto px-4 md:px-6 pt-8 md:pt-12">
@@ -249,8 +255,9 @@ export default function Resultado() {
                 </p>
               </div>
             </div>
+            {/* PASO 4: INTERACCIONES (Acciones del usuario) */}
             <button
-              onClick={() => setShowAuthModal(true)}
+              onClick={() => setShowAuthModal(true)} // 4.1. Registro diferido: El usuario quiere guardar su resultado
               className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-colors whitespace-nowrap shadow-md shadow-blue-200"
             >
               Iniciar Sesión / Registrarse
@@ -268,6 +275,7 @@ export default function Resultado() {
           </h3>
 
           <div className="space-y-4 px-4 md:px-0">
+            {/* 5.1. Mapeo Progresivo: Iteramos sobre el resto del ranking */}
             {otherMatches.map((item, index) => {
               const partyLogo = `/logos/${item.sigla.toUpperCase()}.png`;
               return (

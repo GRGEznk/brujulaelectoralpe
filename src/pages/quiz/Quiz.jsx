@@ -8,32 +8,36 @@ import Analiza from "../../assets/analiza.png";
 import Profundiza from "../../assets/profundiza.png";
 
 export default function Quiz() {
+  // PASO 1: INICIO (Montaje y Estados)
+  // Aquí definimos los "contenedores" donde React guardará la información que cambia
   const navigate = useNavigate();
-  // estado respuestas
+  // estado respuestas: guarda {id_pregunta: valor}
   const [respuestas, setRespuestas] = useState({});
-  // estado pregunta actual
+  // estado pregunta actual: índice de la pregunta que se muestra
   const [preguntaActual, setPreguntaActual] = useState(0);
-  // estado preguntas api
+  // estado preguntas api: lista de preguntas cargadas desde el backend
   const [preguntas, setPreguntas] = useState([]);
 
-  // estados carga y sesion
+  // estados de carga, sesión y envío
   const [loading, setLoading] = useState(true);
   const [sessionId, setSessionId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const totalPreguntas = preguntas.length;
 
-  // 1. cargar preguntas y crear sesion
+  // PASO 2: ALGORITMO DE CARGA (Se ejecuta una sola vez al montar el componente)
   useEffect(() => {
     const initializeQuiz = async () => {
       try {
-        // a. cargar preguntas
+        // 2.1. Solicitud al servidor: obtenemos todas las preguntas de la BD
         const questionsRes = await api.get("/preguntas");
+
+        // 2.2. Filtrado: solo nos quedamos con las que están marcadas como "activa"
         let preguntasActivas = questionsRes.data.filter(
           (p) => p.estado === "activa",
         );
 
-        // aleatorizar
+        // 2.3. Aleatorización (Algoritmo Fisher-Yates): para que el orden sea sorpresa
         for (let i = preguntasActivas.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [preguntasActivas[i], preguntasActivas[j]] = [
@@ -43,7 +47,7 @@ export default function Quiz() {
         }
         setPreguntas(preguntasActivas);
 
-        // b. iniciar sesion
+        // 2.4. Identificación: verificamos si hay un usuario logueado en el navegador
         const storedUser = localStorage.getItem("user");
         let userId = null;
         if (storedUser) {
@@ -55,6 +59,7 @@ export default function Quiz() {
           }
         }
 
+        // 2.5. Inicio de sesión: avisamos a la API que comienza un nuevo quiz
         const startRes = await api.post("/quiz/start", { usuario_id: userId });
         setSessionId(startRes.data.session_id);
       } catch (error) {
@@ -68,14 +73,16 @@ export default function Quiz() {
     initializeQuiz();
   }, []);
 
-  // manejar cambio respuesta
+  // PASO 3: BUCLE DE INTERACCIÓN (El usuario responde y navega)
+  // Maneja el cambio de una respuesta específica
   const handleRespuestaChange = (id, valor) => {
+    // Patrón de inmutabilidad: creamos una copia del estado previo y añadimos la nueva respuesta
     setRespuestas((prev) => ({
       ...prev,
       [id]: valor,
     }));
 
-    // auto-avance
+    // auto-avance opcional (desactivado)
     // setTimeout(() => siguientePregunta(), 300);
   };
 
@@ -96,29 +103,29 @@ export default function Quiz() {
     }
   };
 
+  // PASO 4: ALGORITMO DE FINALIZACIÓN
   const handleFinalizar = async () => {
     if (!sessionId) return;
     setSubmitting(true);
 
     try {
-      // mvp asume salto, idealmente fuerza
-      // formatear respuestas backend
-
+      // 4.1. Transformación: Convertimos el objeto de respuestas en una lista (Payload) para la API
       const answersPayload = Object.entries(respuestas).map(([pId, val]) => ({
         pregunta_id: parseInt(pId),
         valor: parseInt(val),
       }));
 
+      // 4.2. Envío: Guardamos todas las respuestas en el servidor
       await api.post("/quiz/answers", {
         session_id: sessionId,
         answers: answersPayload,
       });
 
-      // obtener token
+      // 4.3. Obtención del resultado: Pedimos el token generado por el backend
       const sessionRes = await api.get(`/quiz/session/${sessionId}`);
       const token = sessionRes.data.token;
 
-      // navegar resultados
+      // 4.4. Redirección: Navegamos a la pantalla de resultados con el token
       navigate(`/resultado/${token || sessionId}`);
     } catch (error) {
       console.error("Error guardando respuestas:", error);
@@ -129,11 +136,13 @@ export default function Quiz() {
   };
 
   // calcular progreso
+  // PASO 5: RENDERIZADO DINÁMICO (La Interfaz reacciona al Estado)
+  // 5.1. Cálculos derivados: React recalcula estos valores cada vez que el estado cambia
   const progreso =
     totalPreguntas > 0 ? ((preguntaActual + 1) / totalPreguntas) * 100 : 0;
   const preguntasRespondidas = Object.keys(respuestas).length;
 
-  // validar pregunta respondida
+  // 5.2. Validación en tiempo real: ¿Ya respondió la pregunta actual?
   const currentAnswered = pregunta && respuestas[pregunta.id] !== undefined;
 
   return (
@@ -218,6 +227,7 @@ export default function Quiz() {
             Responde el Quiz
           </h2>
 
+          {/* PASO 5.3: Renderizado Condicional - Si está cargando muestra el spinner, si no, el quiz */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
@@ -227,7 +237,7 @@ export default function Quiz() {
             </div>
           ) : (
             <>
-              {/* encabezado progreso */}
+              {/* PASO 5.4: Barra de Progreso Dinámica - Usa el cálculo del punto 5.1 */}
               <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div className="flex justify-between items-end mb-4">
                   <div>
@@ -252,7 +262,7 @@ export default function Quiz() {
                 </div>
               </div>
 
-              {/* pregunta actual */}
+              {/* PASO 5.5: Inyección de datos - Pasamos la pregunta actual al componente hijo */}
               {pregunta && (
                 <div className="animate-in fade-in zoom-in-95 duration-300">
                   <Pregunta

@@ -5,11 +5,38 @@ import api from "../../../../api/api";
 export default function ConsultaCandidato({ onEdit }) {
   const [candidatos, setCandidatos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [partidos, setPartidos] = useState([]);
+  const [regiones, setRegiones] = useState([]);
+  const [filters, setFilters] = useState({
+    nombre: "",
+    cargo: "",
+    id_partido: "",
+    id_region: "",
+  });
 
   useEffect(() => {
     fetchCandidatos();
+    fetchPartidos();
+    fetchRegiones();
   }, []);
+
+  const fetchPartidos = async () => {
+    try {
+      const response = await api.get("/partidos");
+      setPartidos(response.data);
+    } catch (error) {
+      console.error("Error al cargar partidos:", error);
+    }
+  };
+
+  const fetchRegiones = async () => {
+    try {
+      const response = await api.get("/regiones");
+      setRegiones(response.data);
+    } catch (error) {
+      console.error("Error al cargar regiones:", error);
+    }
+  };
 
   const fetchCandidatos = async () => {
     try {
@@ -34,11 +61,33 @@ export default function ConsultaCandidato({ onEdit }) {
     }
   };
 
-  const filteredCandidatos = candidatos.filter((c) =>
-    `${c.nombres} ${c.apellidos} ${c.partido_nombre || ""}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase()),
-  );
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      nombre: "",
+      cargo: "",
+      id_partido: "",
+      id_region: "",
+    });
+  };
+
+  const filteredCandidatos = candidatos.filter((c) => {
+    const searchStr = `${c.nombres} ${c.apellidos}`.toLowerCase();
+    const matchesNombre = searchStr.includes(filters.nombre.toLowerCase());
+    const matchesCargo = filters.cargo ? c.cargo === filters.cargo : true;
+    const matchesPartido = filters.id_partido
+      ? String(c.id_partido) === String(filters.id_partido)
+      : true;
+    const matchesRegion = filters.id_region
+      ? String(c.id_region) === String(filters.id_region)
+      : true;
+
+    return matchesNombre && matchesCargo && matchesPartido && matchesRegion;
+  });
 
   if (loading) return <div className="p-4">Cargando candidatos...</div>;
 
@@ -46,18 +95,104 @@ export default function ConsultaCandidato({ onEdit }) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-negro">Gestión de Candidatos</h1>
-        <div className="relative">
-          <Search
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            size={20}
-          />
-          <input
-            type="text"
-            placeholder="Buscar candidato..."
-            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 w-64"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      </div>
+
+      {/* Bloque de Filtros */}
+      <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <div className="form-control">
+            <label className="label py-1">
+              <span className="label-text font-bold text-xs text-gray-500 uppercase">
+                Nombre
+              </span>
+            </label>
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="text"
+                name="nombre"
+                placeholder="Buscar..."
+                className="input input-bordered w-full pl-10 h-10 text-sm"
+                value={filters.nombre}
+                onChange={handleFilterChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-control">
+            <label className="label py-1">
+              <span className="label-text font-bold text-xs text-gray-500 uppercase">
+                Cargo
+              </span>
+            </label>
+            <select
+              name="cargo"
+              className="select select-bordered w-full h-10 min-h-0 text-sm"
+              value={filters.cargo}
+              onChange={handleFilterChange}
+            >
+              <option value="">Todos los cargos</option>
+              <option value="presidente">Presidente</option>
+              <option value="1er vicepresidente">1er Vicepresidente</option>
+              <option value="2do vicepresidente">2do Vicepresidente</option>
+              <option value="diputado">Diputado</option>
+              <option value="senador nacional">Senador Nacional</option>
+              <option value="senador regional">Senador Regional</option>
+              <option value="parlamento andino">Parlamento Andino</option>
+            </select>
+          </div>
+
+          <div className="form-control">
+            <label className="label py-1">
+              <span className="label-text font-bold text-xs text-gray-500 uppercase">
+                Partido
+              </span>
+            </label>
+            <select
+              name="id_partido"
+              className="select select-bordered w-full h-10 min-h-0 text-sm"
+              value={filters.id_partido}
+              onChange={handleFilterChange}
+            >
+              <option value="">Todos los partidos</option>
+              {partidos.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.sigla} - {p.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-control">
+            <label className="label py-1">
+              <span className="label-text font-bold text-xs text-gray-500 uppercase">
+                Región
+              </span>
+            </label>
+            <select
+              name="id_region"
+              className="select select-bordered w-full h-10 min-h-0 text-sm"
+              value={filters.id_region}
+              onChange={handleFilterChange}
+            >
+              <option value="">Todas las regiones</option>
+              {regiones.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            onClick={clearFilters}
+            className="btn btn-outline btn-sm h-10 text-gray-500 border-gray-300 hover:bg-gray-100"
+          >
+            Limpiar filtros
+          </button>
         </div>
       </div>
 
@@ -114,16 +249,16 @@ export default function ConsultaCandidato({ onEdit }) {
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      {candidato.logo_key && (
+                      {candidato.sigla && (
                         <img
-                          src={`/logos/${candidato.logo_key.toUpperCase()}.png`}
+                          src={`/logos/${candidato.sigla.toUpperCase()}.png`}
                           alt="logo"
                           className="w-6 h-6 object-contain"
                           onError={(e) => (e.target.style.display = "none")}
                         />
                       )}
                       <span className="text-gray-600">
-                        {candidato.partido_nombre || "Sin partido"}
+                        {candidato.nombre_partido || "Sin partido"}
                       </span>
                     </div>
                   </td>
