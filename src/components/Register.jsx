@@ -4,6 +4,7 @@ import api from "../api/api";
 import {
   validatePassword,
   PASSWORD_REQUIREMENTS_TEXT,
+  getPasswordStrength,
 } from "../utils/passwordValidator";
 import registerpic from "../assets/register.png";
 
@@ -28,14 +29,6 @@ export default function Register({ onSwitchToLogin }) {
     if (touched[name] || name === "password" || name === "confirmPassword") {
       // Limpiar error específico si es válido (simplificado: limpiamos error general)
       if (error) setError("");
-
-      // Si es password, validamos reglas específicas (opcional: mostrar error inline)
-      if (name === "password") {
-        const result = validatePassword(value);
-        if (result.isValid) {
-          // Podríamos limpiar un estado de error específico de password si existiera
-        }
-      }
     }
   };
 
@@ -95,6 +88,24 @@ export default function Register({ onSwitchToLogin }) {
     touched.password &&
     !passwordValidation.isValid &&
     formData.password.length > 0;
+
+  const strength = getPasswordStrength(formData.password);
+  const strengthColors = [
+    "bg-gray-200",
+    "bg-red-500",
+    "bg-orange-500",
+    "bg-yellow-500",
+    "bg-blue-500",
+    "bg-green-500",
+  ];
+  const strengthLabels = [
+    "Muy débil",
+    "Débil",
+    "Aceptable",
+    "Buena",
+    "Fuerte",
+    "Excelente",
+  ];
 
   return (
     <div className="h-full flex animate-in fade-in slide-in-from-right-4 duration-300">
@@ -194,6 +205,35 @@ export default function Register({ onSwitchToLogin }) {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+
+            {/* Password Strength Indicator */}
+            {formData.password.length > 0 && (
+              <div className="mt-2">
+                <div className="flex gap-1 h-1">
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <div
+                      key={level}
+                      className={`flex-1 rounded-full transition-colors duration-300 ${
+                        level <= strength
+                          ? strengthColors[strength]
+                          : "bg-gray-100"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p
+                  className={`text-[9px] font-bold mt-1 text-right uppercase tracking-wider ${
+                    strength <= 2
+                      ? "text-red-500"
+                      : strength <= 4
+                        ? "text-orange-500"
+                        : "text-green-500"
+                  }`}
+                >
+                  {strengthLabels[strength]}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="form-control">
@@ -237,7 +277,7 @@ export default function Register({ onSwitchToLogin }) {
             </p>
           ) : (
             <p className="text-[10px] text-muted leading-tight px-1 mt-1">
-              {PASSWORD_REQUIREMENTS_TEXT}
+              Min. 6 car., una mayúscula, una minúscula y un número.
             </p>
           )}
 
