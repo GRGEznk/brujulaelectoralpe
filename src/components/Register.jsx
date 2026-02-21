@@ -277,7 +277,7 @@ export default function Register({ onSwitchToLogin }) {
             </p>
           ) : (
             <p className="text-[10px] text-muted leading-tight px-1 mt-1">
-              Min. 6 car., una mayúscula, una minúscula y un número.
+              {PASSWORD_REQUIREMENTS_TEXT}
             </p>
           )}
 
