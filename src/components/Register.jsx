@@ -108,7 +108,7 @@ export default function Register({ onSwitchToLogin }) {
   ];
 
   return (
-    <div className="h-full flex animate-in fade-in slide-in-from-right-4 duration-300">
+    <div className="h-full flex">
       <div className="flex-1 p-8 md:p-12 flex flex-col justify-center">
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-negro mb-2">Crea tu cuenta</h2>
@@ -297,15 +297,15 @@ export default function Register({ onSwitchToLogin }) {
           </button>
         </form>
 
-        <div className="mt-8 text-center text-sm text-gray-600">
-          ¿Ya tienes una cuenta?{" "}
+        <p className="mt-8 text-center text-sm text-gray-600">
+          ¿Ya tienes una cuenta? <br />
           <button
             onClick={() => onSwitchToLogin()}
-            className="text-red font-bold hover:underline"
+            className="text-red font-bold hover:underline inline-block"
           >
             Inicia sesión aquí
           </button>
-        </div>
+        </p>
       </div>
 
       <div className="hidden md:block w-[387px] h-full bg-gray-50 overflow-hidden">

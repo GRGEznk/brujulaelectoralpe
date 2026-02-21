@@ -80,7 +80,7 @@ export default function Login({
   };
 
   return (
-    <div className="h-full flex animate-in fade-in slide-in-from-left-4 duration-300">
+    <div className="h-full flex">
       <div className="hidden md:block w-[387px] h-full bg-gray-50 overflow-hidden">
         <img
           src={loginpic}
@@ -92,7 +92,9 @@ export default function Login({
       <div className="flex-1 p-8 md:p-12 flex flex-col justify-center">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-negro mb-2">Bienvenido</h2>
-          <p className="text-muted">Ingresa a tu cuenta para continuar</p>
+          <p className="text-muted">
+            Ingresa a tu cuenta <br /> para continuar
+          </p>
           {error && (
             <div className="mt-4 p-3 bg-red-50 text-red text-sm rounded-lg border border-red/20 animate-pulse">
               {error}
@@ -186,7 +188,7 @@ export default function Login({
         </form>
 
         <div className="mt-8 text-center text-sm text-gray-600">
-          ¿No tienes una cuenta?{" "}
+          ¿No tienes una cuenta? <br />
           <button
             onClick={onSwitchToRegister}
             className="text-blue font-bold hover:underline"
