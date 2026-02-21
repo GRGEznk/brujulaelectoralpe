@@ -98,7 +98,6 @@ export default function Sidebar({ currentView, setCurrentView }) {
     if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
       localStorage.removeItem("user");
       navigate("/");
-      window.location.reload();
     }
   };
 
@@ -179,10 +178,11 @@ export default function Sidebar({ currentView, setCurrentView }) {
                   className={`
                                         w-full flex items-center gap-3 px-3 py-3 rounded-lg
                                         transition-colors duration-200 font-argentum
-                                        ${isActive && !hasChildren
-                      ? "bg-white text-red font-bold shadow-sm"
-                      : "text-white hover:bg-white/10"
-                    }
+                                        ${
+                                          isActive && !hasChildren
+                                            ? "bg-white text-red font-bold shadow-sm"
+                                            : "text-white hover:bg-white/10"
+                                        }
                                         ${collapsed ? "justify-center" : ""}
                                     `}
                   title={collapsed ? item.label : ""}
@@ -217,10 +217,11 @@ export default function Sidebar({ currentView, setCurrentView }) {
                           className={`
                                                         w-full flex items-center gap-2 px-3 py-2 rounded-md
                                                         text-sm transition-colors duration-200 font-argentum text-left
-                                                        ${isChildActive
-                              ? "bg-white/20 text-white font-semibold"
-                              : "text-white/80 hover:bg-white/10 hover:text-white"
-                            }
+                                                        ${
+                                                          isChildActive
+                                                            ? "bg-white/20 text-white font-semibold"
+                                                            : "text-white/80 hover:bg-white/10 hover:text-white"
+                                                        }
                                                     `}
                         >
                           {isChildActive && (
@@ -244,8 +245,9 @@ export default function Sidebar({ currentView, setCurrentView }) {
           <div className="absolute bottom-full left-4 right-4 mb-2 bg-white rounded-lg shadow-xl py-2 z-50 animate-in fade-in slide-in-from-bottom-2">
             <button
               onClick={() => navigate("/")}
-              className={`w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 font-bold ${collapsed ? "justify-center" : ""
-                }`}
+              className={`w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 font-bold ${
+                collapsed ? "justify-center" : ""
+              }`}
               title={collapsed ? "Ver como usuario" : ""}
             >
               <Eye size={16} />
@@ -253,8 +255,9 @@ export default function Sidebar({ currentView, setCurrentView }) {
             </button>
             <button
               onClick={handleLogout}
-              className={`w-full px-4 py-2 text-left text-sm text-red hover:bg-red-50 flex items-center gap-2 font-bold ${collapsed ? "justify-center" : ""
-                }`}
+              className={`w-full px-4 py-2 text-left text-sm text-red hover:bg-red-50 flex items-center gap-2 font-bold ${
+                collapsed ? "justify-center" : ""
+              }`}
               title={collapsed ? "Cerrar Sesión" : ""}
             >
               <LogOut size={16} />

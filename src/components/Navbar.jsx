@@ -31,9 +31,10 @@ const NavItems = ({ onLinkClick }) => {
               to={link.to}
               onClick={onLinkClick}
               className={`font-argentum transition-all duration-300 relative group
-                ${isActive
-                  ? "text-red font-semibold"
-                  : "text-negro hover:text-red"
+                ${
+                  isActive
+                    ? "text-red font-semibold"
+                    : "text-negro hover:text-red"
                 }`}
             >
               {link.label}
@@ -64,7 +65,9 @@ export default function Navbar() {
       setShowUserMenu(false);
       setIsMobileMenuOpen(false);
       navigate("/");
-      window.location.reload();
+      // En lugar de reload, dejamos que React Router maneje la navegación
+      // y los componentes reaccionen al cambio en localStorage si es necesario
+      // o simplemente forzamos un re-render si el estado de usuario está en el componente
     }
   };
 
@@ -97,16 +100,17 @@ export default function Navbar() {
             {/* desktop */}
             <div className="hidden lg:flex items-center gap-8">
               <ul className="flex items-center gap-6 list-none p-0 m-0">
-                <NavItems onLinkClick={() => { }} />
+                <NavItems onLinkClick={() => {}} />
               </ul>
 
               {/* user menu  */}
               <div className="relative">
                 <button
                   className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 
-                    ${user
-                      ? "bg-red hover:bg-red/90 text-white shadow-lg"
-                      : "text-negro hover:bg-fondos"
+                    ${
+                      user
+                        ? "bg-red hover:bg-red/90 text-white shadow-lg"
+                        : "text-negro hover:bg-fondos"
                     }`}
                   onClick={handleUserClick}
                   title={user ? user.nombre || user.email : "Iniciar Sesión"}
@@ -169,18 +173,21 @@ export default function Navbar() {
         <div className="h-20"></div>
 
         <div
-          className={`fixed inset-0 z-[60] lg:hidden transition-all duration-300 ${isMobileMenuOpen ? "visible" : "invisible"
-            }`}
+          className={`fixed inset-0 z-[60] lg:hidden transition-all duration-300 ${
+            isMobileMenuOpen ? "visible" : "invisible"
+          }`}
         >
           <div
-            className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"
-              }`}
+            className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+              isMobileMenuOpen ? "opacity-100" : "opacity-0"
+            }`}
             onClick={() => setIsMobileMenuOpen(false)}
           ></div>
 
           <div
-            className={`absolute top-0 right-0 h-full w-80 bg-white shadow-2xl transition-transform duration-300 ease-out ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-              }`}
+            className={`absolute top-0 right-0 h-full w-80 bg-white shadow-2xl transition-transform duration-300 ease-out ${
+              isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
           >
             <div className="bg-gradient-to-r from-red to-red/80 text-white p-6">
               <div className="flex items-center justify-between mb-4">
@@ -223,9 +230,10 @@ export default function Navbar() {
                 <button
                   className={`w-full py-3 px-4 rounded-xl font-semibold
                     transition-all duration-300 shadow-lg hover:shadow-xl
-                    ${user
-                      ? "bg-red hover:bg-red/90 text-white"
-                      : "bg-blue hover:bg-blue-dark text-white"
+                    ${
+                      user
+                        ? "bg-red hover:bg-red/90 text-white"
+                        : "bg-blue hover:bg-blue-dark text-white"
                     }`}
                   onClick={() => {
                     if (user) {

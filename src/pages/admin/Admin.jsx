@@ -1,37 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import api from "../../api/api";
 
 // componentes layout admin
 import Sidebar, { getMenuLabel } from "./components/Sidebar";
 import Header from "./components/header";
 
-// componentes de preguntas
-import RegistroPreguntas from "./components/preguntas/RegistroPreguntas";
-import ConsultaPreguntas from "./components/preguntas/ConsultaPreguntas";
+// Carga perezosa de componentes de sub-vistas
+const RegistroPreguntas = lazy(
+  () => import("./components/preguntas/RegistroPreguntas"),
+);
+const ConsultaPreguntas = lazy(
+  () => import("./components/preguntas/ConsultaPreguntas"),
+);
+const RegistroUsuarios = lazy(
+  () => import("./components/usuarios/RegistroUsuarios"),
+);
+const ConsultaUsuario = lazy(
+  () => import("./components/usuarios/ConsultaUsuario"),
+);
+const ConsultaSesion = lazy(
+  () => import("./components/usuarios/ConsultaSesion"),
+);
+const RegistroPartidos = lazy(
+  () => import("./components/partidos/RegistroPartidos"),
+);
+const ConsultaPartidos = lazy(
+  () => import("./components/partidos/ConsultaPartidos"),
+);
+const RegistroPartidoPreg = lazy(
+  () => import("./components/partidos/RegistroPartidoPreg"),
+);
+const ConsultaPartidoPos = lazy(
+  () => import("./components/partidos/ConsultaPartidoPos"),
+);
+const RegistroCandidato = lazy(
+  () => import("./components/partidos/RegistroCandidato"),
+);
+const ConsultaCandidato = lazy(
+  () => import("./components/partidos/ConsultaCandidato"),
+);
+const Dashboard = lazy(() => import("./components/dashboard/Dashboard"));
+
 import preguntasIniciales from "./components/preguntas/data/preguntas";
-
-// componentes de usuarios
-import RegistroUsuarios from "./components/usuarios/RegistroUsuarios";
-import ConsultaUsuario from "./components/usuarios/ConsultaUsuario";
-import ConsultaSesion from "./components/usuarios/ConsultaSesion";
-
-// componentes de partidos
-import RegistroPartidos from "./components/partidos/RegistroPartidos";
-import ConsultaPartidos from "./components/partidos/ConsultaPartidos";
-import RegistroPartidoPreg from "./components/partidos/RegistroPartidoPreg";
-import ConsultaPartidoPos from "./components/partidos/ConsultaPartidoPos";
-
-// componentes de candidatos
-import RegistroCandidato from "./components/partidos/RegistroCandidato";
-import ConsultaCandidato from "./components/partidos/ConsultaCandidato";
-
 import { ADMIN_MENU_ITEMS } from "./components/Sidebar";
 
-// componentes de dashboard
-import Dashboard from "./components/dashboard/Dashboard";
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center p-12">
+    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-red"></div>
+  </div>
+);
 
 // vistas temporales
-
 
 const UsuariosView = () => (
   <div className="space-y-6">
@@ -306,7 +325,9 @@ export default function Admin() {
         <Header title={getMenuLabel(currentView) || "Dashboard"} />
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto p-6">{renderView()}</main>
+        <main className="flex-1 overflow-y-auto p-6">
+          <Suspense fallback={<LoadingSpinner />}>{renderView()}</Suspense>
+        </main>
       </div>
     </div>
   );

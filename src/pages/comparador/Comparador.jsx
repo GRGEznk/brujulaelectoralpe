@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import api from "../../api/api";
 import Hero from "../../components/Hero";
 import ComparadorRespuestas from "./components/ComparadorRespuestas";
 import { Compass } from "lucide-react";
 
 const Comparador = () => {
+  const [searchParams] = useSearchParams();
   const [partidos, setPartidos] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
   const [respuestas, setRespuestas] = useState({});
-  const [idPartido1, setIdPartido1] = useState("");
-  const [idPartido2, setIdPartido2] = useState("");
+  const [idPartido1, setIdPartido1] = useState(searchParams.get("p1") || "");
+  const [idPartido2, setIdPartido2] = useState(searchParams.get("p2") || "");
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
   const [datosPartidosSeleccionados, setDatosPartidosSeleccionados] = useState(
     [],

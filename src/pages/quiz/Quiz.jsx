@@ -172,7 +172,7 @@ export default function Quiz() {
                 ¿Qué piensas realmente?
               </h3>
               <p className="text-base md:text-lg text-muted leading-relaxed">
-                Responde a 60 afirmaciones clave sobre sociedad, economía y
+                Responde a 20 afirmaciones clave sobre sociedad, economía y
                 valores
               </p>
             </div>

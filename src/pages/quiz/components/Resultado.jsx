@@ -231,7 +231,10 @@ export default function Resultado() {
                 >
                   Ver detalles
                 </button>
-                <button className="btn btn-outline text-gray-600 hover:bg-gray-50 border-gray-300 rounded-full px-8">
+                <button
+                  onClick={() => navigate(`/comparador?p1=${topMatch.id}`)}
+                  className="btn btn-outline text-gray-600 hover:bg-gray-50 border-gray-300 rounded-full px-8"
+                >
                   Comparar propuestas
                 </button>
               </div>

@@ -212,11 +212,13 @@ const RegionSelector = ({ regiones, selectedRegionId, onRegionChange }) => (
         value={selectedRegionId}
         onChange={(e) => onRegionChange(e.target.value)}
       >
-        {regiones.map((reg) => (
-          <option key={reg.id} value={reg.id}>
-            {reg.nombre}
-          </option>
-        ))}
+        {regiones
+          .filter((reg) => reg.nombre.toLowerCase() !== "no aplica")
+          .map((reg) => (
+            <option key={reg.id} value={reg.id}>
+              {reg.nombre}
+            </option>
+          ))}
       </select>
     </div>
   </div>
