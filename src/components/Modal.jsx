@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 
 const Modal = ({ title, content, onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
       <div className="bg-fondos rounded-[40px] w-full max-w-4xl max-h-[90vh] overflow-y-auto font-argentum">
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between p-6 bg-fondos border-b border-gray-200 rounded-t-[40px]">
