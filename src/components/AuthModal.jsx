@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./Login";
@@ -7,6 +7,13 @@ import Register from "./Register";
 export default function AuthModal({ isOpen, onClose }) {
   const [[view, direction], setView] = useState(["login", 1]); // [view, direction]
   const [registrationSuccess, setRegistrationSuccess] = useState("");
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const switchToRegister = () => {
     setRegistrationSuccess("");
@@ -44,14 +51,26 @@ export default function AuthModal({ isOpen, onClose }) {
         </button>
 
         <div className="flex-1 overflow-hidden relative bg-white">
-          <AnimatePresence initial={false} mode="popLayout">
+          <AnimatePresence
+            initial={false}
+            mode={isDesktop ? "popLayout" : "wait"}
+          >
             <motion.div
               key={view}
-              initial={{ x: direction > 0 ? "100%" : "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: direction > 0 ? "100%" : "-100%" }}
+              initial={
+                isDesktop
+                  ? { x: direction > 0 ? "100%" : "-100%" }
+                  : { opacity: 0 }
+              }
+              animate={isDesktop ? { x: 0 } : { opacity: 1 }}
+              exit={
+                isDesktop
+                  ? { x: direction > 0 ? "100%" : "-100%" }
+                  : { opacity: 0 }
+              }
               transition={{
                 x: { duration: 1.6, ease: [0.4, 0, 0.2, 1] },
+                opacity: { duration: 0.3 },
               }}
               className="w-full h-full overflow-y-auto bg-white"
             >
